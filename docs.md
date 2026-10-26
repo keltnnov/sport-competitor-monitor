@@ -36,7 +36,6 @@ competitor-monitor/
 │   └── app.js                   # JavaScript приложение
 │
 ├── requirements.txt             # Python зависимости
-├── env.example.txt              # Пример переменных окружения
 ├── history.json                 # Файл истории запросов
 ├── README.md                    # Описание проекта
 └── docs.md                      # Эта документация

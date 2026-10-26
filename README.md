@@ -46,7 +46,7 @@
 - В веб-версии и desktop-версии появились шкалы `design_score` и `animation_potential`, новые блоки и кнопка «Проанализировать всех конкурентов» со сводной таблицей.
 
 ### 4. Ключ API
-- В уроке использовался ProxyAPI. Здесь запросы идут напрямую в OpenAI, ключ `OPENAI_API_KEY` задаётся в `.env` (пример в `env.example.txt`).
+- В уроке использовался ProxyAPI. Здесь запросы идут напрямую в OpenAI, ключ `OPENAI_API_KEY` задаётся в `.env` (см. «Запуск»).
 - `.env` внесён в `.gitignore`, ключи в репозиторий не попадают.
 
 ## 📊 Результаты прогона
@@ -86,7 +86,6 @@
 │   └── results/                 # JSON-ответы прогона всех эндпоинтов
 ├── scripts/test_endpoints.py    # прогон всех эндпоинтов
 ├── requirements.txt
-├── env.example.txt
 └── run.py
 ```
 
@@ -98,12 +97,16 @@
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
-
-# скопируйте пример и впишите свой ключ
-copy env.example.txt .env
-
 python run.py
 ```
+
+Перед запуском создайте в корне проекта файл `.env` со своим ключом:
+
+```
+OPENAI_API_KEY=sk-...
+```
+
+Можно также задать `OPENAI_MODEL` и `OPENAI_VISION_MODEL`, по умолчанию обе `gpt-4o-mini`.
 
 - Веб-интерфейс: http://localhost:8000
 - Swagger (тест эндпоинтов): http://localhost:8000/docs
