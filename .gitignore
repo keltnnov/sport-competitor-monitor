@@ -1,0 +1,33 @@
+# Секреты — ключи API никогда не попадают в репозиторий
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual env
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Builds / binaries
+dist/
+build/
+*.exe
+*.spec
+
+# Локальные данные приложения
+history.json
+
+# Экспорт чата из Cursor (исходник урока, не часть решения)
+cursor_.md
+
+# OS junk
+.DS_Store
+Thumbs.db
