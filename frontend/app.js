@@ -48,6 +48,15 @@ const elements = {
     loadingOverlay: document.getElementById('loading-overlay')
 };
 
+// Экранирование текста с чужих сайтов и из ответов модели перед вставкой в HTML
+function esc(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
 // === API Functions ===
 const api = {
     baseUrl: '',
@@ -158,7 +167,7 @@ const ui = {
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>
-                <span>${message}</span>
+                <span>${esc(message)}</span>
             </div>
         `;
         this.showResults(html);
@@ -196,7 +205,7 @@ const ui = {
             <div class="parsed-content">
                 ${rows.map(([label, value]) => `
                     <div class="label">${label}:</div>
-                    <div class="value">${value}</div>
+                    <div class="value">${esc(value)}</div>
                 `).join('')}
             </div>
         `;
@@ -222,7 +231,7 @@ const ui = {
                         </svg>
                         Резюме
                     </h3>
-                    <p>${analysis.summary}</p>
+                    <p>${esc(analysis.summary)}</p>
                 </div>
             ` : ''}
         `;
@@ -241,7 +250,7 @@ const ui = {
                     </svg>
                     Описание изображения
                 </h3>
-                <p>${analysis.description}</p>
+                <p>${esc(analysis.description)}</p>
             </div>
             
             <div class="result-block">
@@ -257,7 +266,7 @@ const ui = {
                         <div class="score-fill" style="width: ${scorePercent}%"></div>
                     </div>
                 </div>
-                <p>${analysis.visual_style_analysis}</p>
+                <p>${esc(analysis.visual_style_analysis)}</p>
             </div>
 
             <div class="scores-row">
@@ -268,7 +277,7 @@ const ui = {
             ${analysis.product_presentation ? `
                 <div class="result-block">
                     <h3>Подача продукта</h3>
-                    <p>${analysis.product_presentation}</p>
+                    <p>${esc(analysis.product_presentation)}</p>
                 </div>
             ` : ''}
 
@@ -283,17 +292,17 @@ const ui = {
             const a = r.data && r.data.analysis;
             return `
                 <tr>
-                    <td>${r.url}</td>
+                    <td>${esc(r.url)}</td>
                     <td>${a ? a.design_score + '/10' : '—'}</td>
                     <td>${a ? a.animation_potential + '/10' : '—'}</td>
-                    <td>${a ? (a.price_segment || '—') : (r.error || 'Ошибка')}</td>
+                    <td>${a ? esc(a.price_segment || '—') : esc(r.error || 'Ошибка')}</td>
                 </tr>
             `;
         }).join('');
 
         const details = result.results
             .filter(r => r.success && r.data)
-            .map(r => `<h2 class="competitor-title">${r.url}</h2>${this.renderParsedContent(r.data)}`)
+            .map(r => `<h2 class="competitor-title">${esc(r.url)}</h2>${this.renderParsedContent(r.data)}`)
             .join('');
 
         return `
@@ -314,7 +323,7 @@ const ui = {
         try {
             const data = await api.getCompetitors();
             elements.competitorsNiche.textContent = `Ниша: ${data.niche}`;
-            elements.competitorsList.innerHTML = data.urls.map(url => `<li>${url}</li>`).join('');
+            elements.competitorsList.innerHTML = data.urls.map(url => `<li>${esc(url)}</li>`).join('');
         } catch (error) {
             console.error('Failed to load competitors:', error);
         }
@@ -326,16 +335,16 @@ const ui = {
         return `
             <div class="parsed-content">
                 <div class="label">URL:</div>
-                <div class="value">${parsed.url}</div>
+                <div class="value">${esc(parsed.url)}</div>
                 
                 <div class="label">Title:</div>
-                <div class="value">${parsed.title || 'Не найден'}</div>
+                <div class="value">${esc(parsed.title || 'Не найден')}</div>
                 
                 <div class="label">H1:</div>
-                <div class="value">${parsed.h1 || 'Не найден'}</div>
+                <div class="value">${esc(parsed.h1 || 'Не найден')}</div>
                 
                 <div class="label">Первый абзац:</div>
-                <div class="value">${parsed.first_paragraph || 'Не найден'}</div>
+                <div class="value">${esc(parsed.first_paragraph || 'Не найден')}</div>
             </div>
             
             ${parsed.analysis ? this.renderTextAnalysis(parsed.analysis) : ''}
@@ -362,7 +371,7 @@ const ui = {
                     ${title}
                 </h3>
                 <ul>
-                    ${items.map(item => `<li>${item}</li>`).join('')}
+                    ${items.map(item => `<li>${esc(item)}</li>`).join('')}
                 </ul>
             </div>
         `;
@@ -421,7 +430,7 @@ const ui = {
                     </div>
                     <div class="history-content">
                         <div class="history-type">${typeLabels[item.request_type] || item.request_type}</div>
-                        <div class="history-summary">${item.request_summary}</div>
+                        <div class="history-summary">${esc(item.request_summary)}</div>
                     </div>
                     <div class="history-time">${timeStr}</div>
                 </div>

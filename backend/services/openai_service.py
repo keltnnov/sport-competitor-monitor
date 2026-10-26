@@ -1,6 +1,5 @@
 """
-Сервис для работы с OpenAI API (или ProxyAPI — OpenAI-совместимый)
-https://proxyapi.ru/docs/openai-text-generation
+Сервис для работы с OpenAI API
 Промпты адаптированы под нишу «производство спортивной одежды»
 """
 import base64
@@ -60,22 +59,17 @@ def _build_competitor_analysis(data: dict) -> CompetitorAnalysis:
 
 
 class OpenAIService:
-    """Сервис для анализа через OpenAI или ProxyAPI"""
+    """Сервис для анализа через OpenAI API"""
 
     def __init__(self):
         logger.info("=" * 50)
         logger.info("Инициализация OpenAI сервиса")
-        logger.info(f"  Провайдер: {settings.api_provider}")
-        logger.info(f"  Base URL: {settings.api_base_url}")
         logger.info(f"  Модель текста: {settings.openai_model}")
         logger.info(f"  Модель vision: {settings.openai_vision_model}")
-        logger.info(f"  API ключ: {'*' * 10}...{settings.api_key[-4:] if settings.api_key else 'НЕ ЗАДАН'}")
+        logger.info(f"  API ключ: {'*' * 10}...{settings.openai_api_key[-4:] if settings.openai_api_key else 'НЕ ЗАДАН'}")
 
-        # OpenAI напрямую или ProxyAPI - в зависимости от ключа в .env
-        self.client = OpenAI(
-            api_key=settings.api_key or "not-set",
-            base_url=settings.api_base_url
-        )
+        # Ключ OPENAI_API_KEY берётся из .env; без ключа сервер стартует, а запросы вернут понятную ошибку
+        self.client = OpenAI(api_key=settings.openai_api_key or "not-set")
         self.model = settings.openai_model
         self.vision_model = settings.openai_vision_model
         

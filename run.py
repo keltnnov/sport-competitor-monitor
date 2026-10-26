@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print()
     print(f"🤖 Модель текста:  {settings.openai_model}")
     print(f"👁️ Модель vision:  {settings.openai_vision_model}")
-    print(f"🔑 API ключ:       {'✓ Настроен' if settings.proxy_api_key else '✗ НЕ ЗАДАН!'}")
+    print(f"🔑 API ключ:       {'✓ Настроен (OpenAI)' if settings.openai_api_key else '✗ НЕ ЗАДАН! Впишите OPENAI_API_KEY в .env'}")
     print()
     print("-" * 60)
     print("Логи запросов будут отображаться ниже...")

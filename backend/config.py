@@ -43,13 +43,8 @@ logger = setup_logging()
 class Settings(BaseSettings):
     """Настройки приложения"""
     
-    # OpenAI напрямую (приоритетнее, если задан ключ)
+    # OpenAI API
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
-    openai_base_url: str = "https://api.openai.com/v1"
-
-    # ProxyAPI (OpenAI-совместимый) — используется, если OPENAI_API_KEY не задан
-    proxy_api_key: str = os.getenv("PROXY_API_KEY", "")
-    proxy_api_base_url: str = "https://api.proxyapi.ru/openai/v1"
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     openai_vision_model: str = os.getenv("OPENAI_VISION_MODEL", "gpt-4o-mini")
 
@@ -75,20 +70,6 @@ class Settings(BaseSettings):
     # Парсер
     parser_timeout: int = 30
     parser_user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
-
-    @property
-    def api_key(self) -> str:
-        """Активный ключ: OpenAI, иначе ProxyAPI"""
-        return self.openai_api_key or self.proxy_api_key
-
-    @property
-    def api_base_url(self) -> str:
-        """Активный base URL под выбранный ключ"""
-        return self.openai_base_url if self.openai_api_key else self.proxy_api_base_url
-
-    @property
-    def api_provider(self) -> str:
-        return "OpenAI" if self.openai_api_key else "ProxyAPI"
 
     class Config:
         env_file = ".env"
